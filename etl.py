@@ -3,41 +3,43 @@ import glob
 import psycopg2
 import pandas as pd
 from sql_queries import *
+import pdb
 
 
 def process_song_file(cur, filepath):
     # open song file
-    df = 
+    df = pd.read_json(filepath, lines=True)
 
-    # insert song record
-    song_data = 
-    cur.execute(song_table_insert, song_data)
-    
     # insert artist record
-    artist_data = 
+    artist_data = list(df.values[0][[1, 5, 4, 2, 3]])
     cur.execute(artist_table_insert, artist_data)
 
+    # insert song record
+    song_data = list(df.values[0][[6, 7, 1, 9, 8]])
+    cur.execute(song_table_insert, song_data)
+    
 
 def process_log_file(cur, filepath):
     # open log file
-    df = 
+    df = pd.read_json(filepath, lines=True)
 
     # filter by NextSong action
-    df = 
+    df = df[df.page=="NextSong"]
+    df.ts = pd.to_datetime(df.ts)
 
     # convert timestamp column to datetime
-    t = 
+    t = df.ts
     
     # insert time data records
-    time_data = 
-    column_labels = 
-    time_df = 
+    time_data = (list(t.dt.time), list(t.dt.hour), list(t.dt.day), list(t.dt.isocalendar().week), list(t.dt.month), list(t.dt.year), list(t.dt.weekday))
+    column_labels = ("start time", "hour", "day", "week", "month", "year", "weekday")
+    time_df = pd.DataFrame(dict(zip(column_labels, time_data)))
 
     for i, row in time_df.iterrows():
         cur.execute(time_table_insert, list(row))
 
     # load user table
-    user_df = 
+    user_df = df.loc[:, ["userId", "firstName", "lastName", "gender", "level"]]
 
     # insert user records
     for i, row in user_df.iterrows():
@@ -53,10 +55,11 @@ def process_log_file(cur, filepath):
         if results:
             songid, artistid = results
         else:
+            #pdb.set_trace()
             songid, artistid = None, None
 
         # insert songplay record
-        songplay_data = 
+        songplay_data = (index, row.ts, row.userId, row.level, songid, artistid, row.sessionId, row.location, row.userAgent)
         cur.execute(songplay_table_insert, songplay_data)
 
 
