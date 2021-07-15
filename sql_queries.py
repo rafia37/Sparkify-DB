@@ -12,8 +12,8 @@ songplay_table_create = ("""CREATE TABLE IF NOT EXISTS songplays (songplay_id in
                                                                   start_time int, 
                                                                   user_id int, 
                                                                   level varchar, 
-                                                                  song_id int, 
-                                                                  artist_id int,
+                                                                  song_id varchar, 
+                                                                  artist_id varchar,
                                                                   session_id int,
                                                                   location varchar,
                                                                   user_agent varchar);
@@ -26,14 +26,14 @@ user_table_create = ("""CREATE TABLE IF NOT EXISTS users (user_id int PRIMARY KE
                                                           level varchar);
 """)
 
-song_table_create = ("""CREATE TABLE IF NOT EXISTS songs (song_id int PRIMARY KEY,
+song_table_create = ("""CREATE TABLE IF NOT EXISTS songs (song_id varchar PRIMARY KEY,
                                                           title varchar,
-                                                          artist_id int,
+                                                          artist_id varchar,
                                                           year int,
                                                           duration numeric);
 """)
 
-artist_table_create = ("""CREATE TABLE IF NOT EXISTS artists (artist_id int PRIMARY KEY,
+artist_table_create = ("""CREATE TABLE IF NOT EXISTS artists (artist_id varchar PRIMARY KEY,
                                                             name varchar,
                                                             location varchar,
                                                             latitude numeric,
@@ -51,25 +51,31 @@ time_table_create = ("""CREATE TABLE IF NOT EXISTS time (start_time numeric,
 
 # INSERT RECORDS
 
-songplay_table_insert = ("""
+songplay_table_insert = ("""INSERT INTO songplays (songplay_id int, start_time, user_id, level, song_id, artist_id, session_id, location, user_agent) \
+                             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
 """)
 
-user_table_insert = ("""
+user_table_insert = ("""INSERT INTO users (user_id, first_name, last_name, gender, level) \
+                             VALUES (%s, %s, %s, %s, %s)
 """)
 
-song_table_insert = ("""
+song_table_insert = ("""INSERT INTO songs (song_id, title, artist_id, year, duration) \
+                             VALUES (%s, %s, %s, %s, %s)
 """)
 
-artist_table_insert = ("""
+artist_table_insert = ("""INSERT INTO songs (artist_id, name, location, latitude, longitude) \
+                             VALUES (%s, %s, %s, %s, %s)
 """)
 
 
-time_table_insert = ("""
+time_table_insert = ("""INSERT INTO songs (start_time, hour, day, week, month, year, weekday) \
+                             VALUES (%s, %s, %s, %s, %s, %s, %s)
 """)
 
 # FIND SONGS
 
-song_select = ("""
+song_select = ("""SELECT * FROM songs \
+                  WHERE songs.song_id = %s
 """)
 
 # QUERY LISTS
