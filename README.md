@@ -16,10 +16,10 @@ The pipeline starts by reading in the input datasets -
 1. JSON log of user activity
 2. JSON metadata of songs
 
-We convert the input data to pandas dataframes, as transform them as necessary (units, data type, quantity etc). Then we create the dimension tables one by one in our postgresql database using python. Finally, using the dimension tables, we create the fact table, *songplays*.
+We convert the input data to pandas dataframes, and transform them as necessary (units, data type, quantity etc). Then we create the dimension tables one by one in our postgresql database using python. Finally, using the dimension tables, we create the fact table, *songplays*.
 
 #### Sample Queries
-The *songplays* is optimized for the *songselect* query -
+The *songplays* table is optimized for the *songselect* query -
 
 ```sql
 SELECT songs.song_id, songs.artist_id 
@@ -35,7 +35,7 @@ There are 6 important files in this repository that are essential for running an
 1. `sql_queries.py` all the SQL queries in psql and python  
 2. `create_tables.py` dropping and creating all the necessary tables using *sql_queries.py*
 3. `etl.ipynb` The ETL pipeline that loads and transforms data and populates tables
-4. `etl.py` Same as *etl.ipynb* but automated and precesses entire dataset
+4. `etl.py` Same as *etl.ipynb* but automated and precesses the entire dataset
 5. `test.ipynb` testing queries and pipeline issues
 6. `README.md` Documentation for the database
 
